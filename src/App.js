@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import mondaySdk from "monday-sdk-js";
-
-const monday = mondaySdk();
 
 function App() {
   const [items, setItems] = useState([]);
@@ -9,10 +6,13 @@ function App() {
   const [boardId, setBoardId] = useState(null);
 
   useEffect(() => {
+    // Listen for the board context
     monday.listen("context", async (res) => {
-      const boardId = res.data.boardIds[0];
-      setBoardId(boardId);
-      const itemsRes = await monday.api(`
+      const boardId = res.data.boardIds[0]; // Assuming you get an array of boardIds, use the first one
+      setBoardId(boardId); // Store the boardId in the state
+
+      // Fetch data using fetch API
+      const query = `
         query {
           boards(ids: ${boardId}) {
             id
@@ -32,23 +32,38 @@ function App() {
             }
           }
         }
-      `);
-      
-        const board = res.data.boards[0];
-        setColumns(board.columns);
-        setItems(board.items);
+      `;
+
+      try {
+        const response = await fetch("https://api.monday.com/v2", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjQ5NzcxNzIyNSwiYWFpIjoxMSwidWlkIjo3MTkwNjEwMCwiaWFkIjoiMjAyNS0wNC0wOVQxMzo0Nzo0Mi4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ5NjgwNTcsInJnbiI6ImV1YzEifQ.lqrSr9M9YPx0lKPOYYhOsF41o-KMcd1PQHa5lCDv6Zk", // Replace with your Monday.com API key
+            "API-Version": "2023-04", // Specify the API version
+          },
+          body: JSON.stringify({ query }),
+        });
+
+        const data = await response.json();
+        const board = data.data.boards[0];
+        setColumns(board.columns); // Set the columns
+        setItems(board.items); // Set the items
         console.log("Fetched columns:", board.columns);
         console.log("Fetched items:", board.items);
-        
-        board.items.forEach(item => {
+
+        // Debugging: Output column and item values
+        board.items.forEach((item) => {
           console.log(`Item: ${item.name}`);
-          item.column_values.forEach(colVal => {
+          item.column_values.forEach((colVal) => {
             console.log(`- ${colVal.id}: ${colVal.text}`);
           });
         });
-      });
-    }, []);
-
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    });
+  }, []);
 
   return (
     <div style={{ padding: "1rem" }}>
@@ -83,3 +98,4 @@ function App() {
 }
 
 export default App;
+  
