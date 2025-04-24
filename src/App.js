@@ -10,53 +10,45 @@ function App() {
 
   useEffect(() => {
     monday.listen("context", async (res) => {
-      const ids = res.data.boardIds;
-      if (ids && ids.length > 0) {
-        setBoardId(ids[0]); // Use first board selected
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!boardId) return;
-
-    // Fetch board data when boardId is ready
-    monday.api(`
-      query {
-        boards(ids: ${boardId}) {
-          id
-          name
-          columns {
-            id
-            title
-            type
-          }
-        }
-        items_page(limit: 50, board_id: ${boardId}) {
-          items {
+      const boardId = res.data.boardIds[0];
+      setBoardId(boardId);
+      const itemsRes = await monday.api(`
+        query {
+          boards(ids: ${boardId}) {
             id
             name
-            column_values {
+            columns {
               id
-              text
+              title
+              type
+            }
+            items {
+              id
+              name
+              column_values {
+                id
+                text
+              }
             }
           }
         }
-      }
-    `).then((res) => {
-      const board = res.data.boards[0];
-      setColumns(board.columns);
-      setItems(board.items);
-      console.log("Fetched columns:", board.columns);
-      console.log("Fetched items:", board.items);
-      board.items.forEach(item => {
-        console.log(`Item: ${item.name}`);
-        item.column_values.forEach(colVal => {
-          console.log(`- ${colVal.id}: ${colVal.text}`);
+      `);
+      
+        const board = res.data.boards[0];
+        setColumns(board.columns);
+        setItems(board.items);
+        console.log("Fetched columns:", board.columns);
+        console.log("Fetched items:", board.items);
+        
+        board.items.forEach(item => {
+          console.log(`Item: ${item.name}`);
+          item.column_values.forEach(colVal => {
+            console.log(`- ${colVal.id}: ${colVal.text}`);
+          });
         });
       });
-    });
-  }, [boardId]);
+    }, []);
+
 
   return (
     <div style={{ padding: "1rem" }}>
