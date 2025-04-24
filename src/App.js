@@ -24,10 +24,15 @@ function App() {
     monday.api(`
       query {
         boards(ids: ${boardId}) {
+          id
+          name
           columns {
             id
             title
+            type
           }
+        }
+        items_page(limit: 50, board_id: ${boardId}) {
           items {
             id
             name
