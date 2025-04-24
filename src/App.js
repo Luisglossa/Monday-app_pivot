@@ -1,37 +1,65 @@
 import React, { useEffect, useState } from "react";
-import monday from "./mondayClient";
+import mondaySdk from "monday-sdk-js";
+
+const monday = mondaySdk();
 
 function App() {
-  const [data, setData] = useState([]);
+  const [items, setItems] = useState([]);
+  const [columns, setColumns] = useState([]);
 
   useEffect(() => {
     monday.listen("context", async (res) => {
       const boardId = res.data.boardId;
 
-      if (boardId) {
-        const result = await monday.api(`
-          query {
-            boards(ids: ${boardId}) {
-              items {
+      const itemsRes = await monday.api(`
+        query {
+          boards(ids: ${boardId}) {
+            columns {
+              id
+              title
+            }
+            items {
+              id
+              name
+              column_values {
                 id
-                name
-                column_values {
-                  id
-                  text
-                }
+                text
               }
             }
           }
-        `);
-        setData(result.data.boards[0].items);
-      }
+        }
+      `);
+
+      const board = itemsRes.data.boards[0];
+      setColumns(board.columns);
+      setItems(board.items);
     });
   }, []);
 
   return (
-    <div>
-      <h1>Pivot Table Viewer</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+    <div style={{ padding: "1rem" }}>
+      <h2>📋 Monday Board Viewer</h2>
+      <table border="1" cellPadding="5">
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            {columns.map((col) => (
+              <th key={col.id}>{col.title}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item) => (
+            <tr key={item.id}>
+              <td>{item.name}</td>
+              {columns.map((col) => {
+                const val = item.column_values.find((v) => v.id === col.id);
+                return <td key={col.id}>{val?.text || ""}</td>;
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
