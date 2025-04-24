@@ -42,6 +42,14 @@ function App() {
       const board = res.data.boards[0];
       setColumns(board.columns);
       setItems(board.items);
+      console.log("Fetched columns:", board.columns);
+      console.log("Fetched items:", board.items);
+      board.items.forEach(item => {
+        console.log(`Item: ${item.name}`);
+        item.column_values.forEach(colVal => {
+          console.log(`- ${colVal.id}: ${colVal.text}`);
+        });
+      });
     });
   }, [boardId]);
 
