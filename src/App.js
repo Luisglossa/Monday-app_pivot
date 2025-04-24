@@ -5,7 +5,7 @@ const monday = mondaySdk();
 function App() {
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
-  const [boardId, setBoardId] = useState(null);
+  //const [boardId, setBoardId] = useState(null);
 
   useEffect(() => {
     // Listen for the board context
@@ -14,7 +14,7 @@ function App() {
       //setBoardId(boardId); // Store the boardId in the state
 
       // Fetch data using fetch API
-      const query = `
+      let query = `
         query {
           boards(ids: 1702544988) {
             items_page{
@@ -36,17 +36,18 @@ function App() {
           }
         }
       `;
-
-      try {
-        const response = await fetch("https://api.monday.com/v2", {
-          method: "POST",
+        fetch ("https://api.monday.com/v2", {
+          method: 'post',
           headers: {
-            "Content-Type": "application/json",
-            Authorization: "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjQ5NzcxNzIyNSwiYWFpIjoxMSwidWlkIjo3MTkwNjEwMCwiaWFkIjoiMjAyNS0wNC0wOVQxMzo0Nzo0Mi4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ5NjgwNTcsInJnbiI6ImV1YzEifQ.lqrSr9M9YPx0lKPOYYhOsF41o-KMcd1PQHa5lCDv6Zk", // Replace with your Monday.com API key
-            "API-Version": "2025-04", // Specify the API version
+            'Content-Type': 'application/json',
+            'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjQ5NzcxNzIyNSwiYWFpIjoxMSwidWlkIjo3MTkwNjEwMCwiaWFkIjoiMjAyNS0wNC0wOVQxMzo0Nzo0Mi4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ5NjgwNTcsInJnbiI6ImV1YzEifQ.lqrSr9M9YPx0lKPOYYhOsF41o-KMcd1PQHa5lCDv6Zk', // Replace with your Monday.com API key
+            'API-Version': '2023-10', // Specify the API version
           },
-          body: JSON.stringify({ query }),
-        });
+          body: JSON.stringify({ query : query }),
+        })
+        .then(res => res.json())
+        .then(res => console.log(JSON.stringify(res, null, 2)));
+        
 
         const data = await response.json();
         const board = data.data.boards[0];
@@ -62,18 +63,14 @@ function App() {
             console.log(`- ${colVal.id}: ${colVal.text}`);
           });
         });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      
     });
   }, []);
 
   return (
     <div style={{ padding: "1rem" }}>
       <h2>📊 Dashboard Widget Viewer</h2>
-      {!boardId ? (
-        <p>Please select a board in the widget settings.</p>
-      ) : (
+      
         <table border="1" cellPadding="5">
           <thead>
             <tr>
@@ -95,7 +92,7 @@ function App() {
             ))}
           </tbody>
         </table>
-      )}
+      
     </div>
   );
 }
