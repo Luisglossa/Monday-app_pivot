@@ -10,8 +10,8 @@ function App() {
   useEffect(() => {
     // Listen for the board context
     monday.listen("context", async (res) => {
-      //const boardId = res.data.boardIds[0]; // Assuming you get an array of boardIds, use the first one
-      //setBoardId(boardId); // Store the boardId in the state
+      const boardId = res.data.boardIds[0]; // Assuming you get an array of boardIds, use the first one
+      setBoardId(boardId); // Store the boardId in the state
 
       // Fetch data using fetch API
       let query = `
@@ -45,8 +45,9 @@ function App() {
           },
           body: JSON.stringify({ query : query }),
         })
-        .then(res => res.json())
-        .then(res => console.log(JSON.stringify(res, null, 2)));
+        //.then(res => res.json())
+        //.then(res => console.log(JSON.stringify(res, null, 2)))
+         ;
         
 
         const data = await response.json();
