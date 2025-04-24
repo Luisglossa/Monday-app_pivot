@@ -11,7 +11,7 @@ function App() {
     // Listen for the board context
     monday.listen("context", async (res) => {
       const boardId = res.data.boardIds[0]; // Assuming you get an array of boardIds, use the first one
-      setBoardId(boardId); // Store the boardId in the state
+      //setBoardId(boardId); // Store the boardId in the state
 
       // Fetch data using fetch API
       let query = `
@@ -36,7 +36,7 @@ function App() {
           }
         }
       `;
-        fetch ("https://api.monday.com/v2", {
+        const response = await fetch ("https://api.monday.com/v2", {
           method: 'post',
           headers: {
             'Content-Type': 'application/json',
@@ -44,12 +44,8 @@ function App() {
             'API-Version': '2023-10', // Specify the API version
           },
           body: JSON.stringify({ query : query }),
-        })
-        //.then(res => res.json())
-        //.then(res => console.log(JSON.stringify(res, null, 2)))
-         ;
+        });
         
-
         const data = await response.json();
         const board = data.data.boards[0];
         setColumns(board.columns); // Set the columns
@@ -58,12 +54,12 @@ function App() {
         console.log("Fetched items:", board.items);
 
         // Debugging: Output column and item values
-        board.items.forEach((item) => {
-          console.log(`Item: ${item.name}`);
-          item.column_values.forEach((colVal) => {
-            console.log(`- ${colVal.id}: ${colVal.text}`);
-          });
-        });
+       // board.items.forEach((item) => {
+          //console.log(`Item: ${item.name}`);
+          //item.column_values.forEach((colVal) => {
+           // console.log(`- ${colVal.id}: ${colVal.text}`);
+          //});
+       // });
       
     });
   }, []);
