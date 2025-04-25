@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Select from 'react-select';
 import mondaySdk from "monday-sdk-js";
 const monday = mondaySdk();
 
@@ -7,6 +8,7 @@ function App() {
   const [columns, setColumns] = useState([]);
   //const [boardId, setBoardId] = useState(null);
   const [columnVisibility, setColumnVisibility] = useState(columns.map(() => true)); // By default, all columns are visible
+  const [selectedColumns, setSelectedColumns] = useState([]);
 
   useEffect(() => {
     // Listen for the board context
@@ -69,6 +71,29 @@ function App() {
     }));
   };
 
+  const columnOptions = columns.map(col => ({
+    value: col.id,
+    label: col.title
+  }));
+  const handleColumnChange = (selectedOptions) => {
+    setSelectedColumns(selectedOptions);
+  
+    const newVisibility = {};
+    columns.forEach(col => {
+      newVisibility[col.id] = selectedOptions.some(option => option.value === col.id);
+    });
+    setColumnVisibility(newVisibility);
+  };
+  useEffect(() => {
+    setSelectedColumns(columnOptions);
+    const visibility = {};
+    columnOptions.forEach(opt => {
+      visibility[opt.value] = true;
+    });
+    setColumnVisibility(visibility);
+  }, [columns]);
+
+
   return (
     
     
@@ -76,25 +101,19 @@ function App() {
       <h2><span>📊</span> Dashboard Widget Viewer</h2>
       <div>
         <label>Column Visibility: </label>
-        <div style={{ margin: "1rem 0" }}>
-          {columns.map((col) => (
-            <div key={col.id}>
-              <input
-                type="checkbox"
-                checked={columnVisibility[col.id]}
-                onChange={() => toggleColumnVisibility(col.id)}
-              />
-              {col.title}
-            </div>
-          ))}
-        </div>
+        <Select
+        isMulti
+        options={columnOptions}
+        value={selectedColumns}
+        onChange={handleColumnChange}
+        placeholder="Toggle column visibility..."
+      />        
       </div>
-
-           
+                 
         <table border="1" cellPadding="5">
           <thead>
             <tr>
-              <th>Item Name</th>
+              
               {columns.length > 0 &&
         columns.map((col) => {
           if (columnVisibility[col.id]) {
