@@ -14,18 +14,15 @@ function App() {
       //setBoardId(boardId); // Store the boardId in the state
 
       // Fetch data using fetch API
-      let query = `
-         {
+      let query = `{
           boards(ids: 1702544988) {
-          name
-          id
-          description
-          columns {
+            name
             id
-            title
-            type
-          }  
-          items_page{
+            columns {
+              id
+              title
+              type
+            }  
               
               items {
                 id
@@ -35,10 +32,9 @@ function App() {
                   text
                 }
               }
-            }
+            
           }
-        }
-      `;
+        }`;
       fetch ("https://api.monday.com/v2", {
           method: 'post',
           headers: {
