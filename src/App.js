@@ -15,15 +15,13 @@ function App() {
 
       // Fetch data using fetch API
       let query = `
-        query {
+         {
           boards(ids: 1702544988) {
-            items_page{
-              cursor
-              columns {
-                id
-                title
-                type
-              }
+          name
+          id
+          description  
+          items_page{
+              
               items {
                 id
                 name
@@ -36,17 +34,19 @@ function App() {
           }
         }
       `;
-        const response = await fetch ("https://api.monday.com/v2", {
+        fetch ("https://api.monday.com/v2", {
           method: 'post',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjQ5NzcxNzIyNSwiYWFpIjoxMSwidWlkIjo3MTkwNjEwMCwiaWFkIjoiMjAyNS0wNC0wOVQxMzo0Nzo0Mi4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ5NjgwNTcsInJnbiI6ImV1YzEifQ.lqrSr9M9YPx0lKPOYYhOsF41o-KMcd1PQHa5lCDv6Zk', // Replace with your Monday.com API key
             'API-Version': '2023-10', // Specify the API version
           },
-          body: JSON.stringify({ query : query }),
-        });
+          body: JSON.stringify({ 'query' : query }),
+        })
+        .then(res => res.json())
+        .then(res => console.log(JSON.stringify(res, null, 2)));
         
-        const data = await response.json();
+        const data = await res.json();
         const board = data.data.boards[0];
         setColumns(board.columns); // Set the columns
         setItems(board.items); // Set the items
