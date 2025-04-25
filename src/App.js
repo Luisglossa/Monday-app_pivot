@@ -27,6 +27,7 @@ function App() {
                 name
                 column_values {
                   id
+                  title
                   text
                 }
               }
@@ -72,21 +73,20 @@ function App() {
           <thead>
             <tr>
               <th>Item Name</th>
-              {columns.map((col) => (
-                <th key={col.id}>{col.title}</th>
-              ))}
+              {items.length > 0 &&
+        items[0].column_values.map((col, idx) => (
+          <th key={idx}>{col.title}</th>
+        ))}
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                {columns.map((col) => {
-                  const val = item.column_values.find((v) => v.id === col.id);
-                  return <td key={col.id}>{val?.text || ""}</td>;
-                })}
-              </tr>
-            ))}
+          {items.map((item, rowIndex) => (
+      <tr key={rowIndex}>
+        {item.column_values.map((col, colIndex) => (
+          <td key={colIndex}>{col.text}</td>
+        ))}
+      </tr>
+    ))}
           </tbody>
         </table>
       
