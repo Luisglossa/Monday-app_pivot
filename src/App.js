@@ -50,7 +50,7 @@ function App() {
           console.log(JSON.stringify(data, null, 2));
           const board = data.data.boards[0];
           setColumns(board.columns); // Set the columns
-          setItems(board.items); // Set the items
+          setItems(board.items_page.items); // Set the items
           console.log("Fetched columns:", board.columns);
           console.log("Fetched items:", board.items);
         });
