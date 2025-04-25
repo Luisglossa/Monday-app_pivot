@@ -18,11 +18,7 @@ function App() {
           boards(ids: 1702544988) {
             name
             id
-            columns {
-              id
-              title
-              type
-            }  
+              
             items_page {
               cursor  
               items {
