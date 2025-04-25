@@ -199,10 +199,10 @@ function App() {
         <td>{item.name}</td>
         {item.column_values.map((col) => {
           if (columnVisibility[col.id]) {
-            if (col.type === 'mirror' && col.value) {
+            if (col.type === 'mirror') {
               return (
                 <td key={col.id}>
-                        {col.value && col.value.text ? col.value.text : ''}
+                        {col.display_value ? col.display_value : ''}
                       </td>
                     );
                   } 
