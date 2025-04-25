@@ -6,7 +6,7 @@ const monday = mondaySdk();
 function App() {
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
-  const [boardId, setBoardId] = useState(null);
+  //const [boardId, setBoardId] = useState(null);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [showPanel, setShowPanel] = useState(false);
@@ -14,12 +14,12 @@ function App() {
   useEffect(() => {
     // Listen for the board context
     monday.listen("context", async (res) => {
-      const boardId = res.data.boardIds[0]; // Assuming you get an array of boardIds, use the first one
-      setBoardId(boardId); // Store the boardId in the state
+      //const boardId = res.data.boardIds[0]; // Assuming you get an array of boardIds, use the first one
+      //setBoardId(boardId); // Store the boardId in the state
 
       // Fetch data using fetch API
       let query = `{
-          boards(ids: ${boardId}) {
+          boards(ids: 1702544988) {
             name
             id
             columns {
@@ -37,6 +37,10 @@ function App() {
                   text
                   type
                   value
+                  ... on MirrorValue {
+                    display_value
+                    id
+                  }
                 }
               }
             }
