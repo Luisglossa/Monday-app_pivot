@@ -6,6 +6,15 @@ function App() {
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
   //const [boardId, setBoardId] = useState(null);
+  const [visibleColumns, setVisibleColumns] = useState(columns.map(() => true)); // By default, all columns are visible
+
+  const toggleColumnVisibility = (index) => {
+    setVisibleColumns((prev) => {
+      const newVisibleColumns = [...prev];
+      newVisibleColumns[index] = !newVisibleColumns[index]; // Toggle the visibility for the column at index
+      return newVisibleColumns;
+    });
+  };
 
   useEffect(() => {
     // Listen for the board context
@@ -52,7 +61,7 @@ function App() {
           setColumns(board.columns); // Set the columns
           setItems(board.items_page.items); // Set the items
           console.log("Fetched columns:", board.columns);
-          console.log("Fetched items:", board.items);
+          console.log("Fetched items:", board.items_page.items);
         });
 
         // Debugging: Output column and item values
@@ -67,25 +76,48 @@ function App() {
   }, []);
 
   return (
+    
+    
     <div style={{ padding: "1rem" }}>
-      <h2>📊 Dashboard Widget Viewer</h2>
-      
+      <div>
+  {columns.map((column, idx) => (
+    <div key={column.id}>
+      <label>
+        <input
+          type="checkbox"
+          checked={visibleColumns[idx]} // Check if the column is visible
+          onChange={() => toggleColumnVisibility(idx)} // Toggle visibility when clicked
+        />
+        {column.title}
+      </label>
+    </div>
+  ))}
+</div>
+
+      <h2><span>📊</span> Dashboard Widget Viewer</h2>     
         <table border="1" cellPadding="5">
           <thead>
             <tr>
               <th>Item Name</th>
               {columns.length > 0 &&
-        columns.map((col, idx) => (
-          <th key={idx}>{col.title}</th>
-        ))}
+        columns.map((col, idx) => {
+          if (visibleColumns[idx]) {
+            return <th key={idx}>{col.title}</th>;
+          }
+          return null;
+        })}
             </tr>
           </thead>
           <tbody>
+            <td>{items.name}</td>
           {items.map((item, rowIndex) => (
       <tr key={rowIndex}>
-        {item.column_values.map((col, colIndex) => (
-          <td key={colIndex}>{col.text}</td>
-        ))}
+        {item.column_values.map((col, colIndex) => {
+          if (visibleColumns[colIndex]) {
+            return <td key={colIndex}>{col.text}</td>;
+          }
+          return null;
+        })}
       </tr>
     ))}
           </tbody>
