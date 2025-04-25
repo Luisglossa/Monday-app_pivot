@@ -18,7 +18,11 @@ function App() {
           boards(ids: 1702544988) {
             name
             id
-              
+            columns {
+              id
+              title
+              type
+            }  
             items_page {
               cursor  
               items {
@@ -36,7 +40,7 @@ function App() {
           method: 'post',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjQ5NzcxNzIyNSwiYWFpIjoxMSwidWlkIjo3MTkwNjEwMCwiaWFkIjoiMjAyNS0wNC0wOVQxMzo0Nzo0Mi4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ5NjgwNTcsInJnbiI6ImV1YzEifQ.lqrSr9M9YPx0lKPOYYhOsF41o-KMcd1PQHa5lCDv6Zk', // Replace with your Monday.com API key
+            'Authorization': 'APIkey', // Replace with your Monday.com API key
             'API-Version': '2023-10', // Specify the API version
           },
           body: JSON.stringify({ 'query' : query }),
@@ -70,8 +74,8 @@ function App() {
           <thead>
             <tr>
               <th>Item Name</th>
-              {items.length > 0 &&
-        items[0].column_values.map((col, idx) => (
+              {columns.length > 0 &&
+        columns.map((col, idx) => (
           <th key={idx}>{col.title}</th>
         ))}
             </tr>
