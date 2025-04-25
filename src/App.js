@@ -75,19 +75,19 @@ function App() {
     <div style={{ padding: "1rem" }}>
       <h2><span>📊</span> Dashboard Widget Viewer</h2>
       <div>
-        <label>Column Visibility:</label>
-        <select style={{ margin: "1rem 0" }}>
+        <label>Column Visibility: </label>
+        <div style={{ margin: "1rem 0" }}>
           {columns.map((col) => (
-            <option key={col.id}>
+            <div key={col.id}>
               <input
                 type="checkbox"
                 checked={columnVisibility[col.id]}
                 onChange={() => toggleColumnVisibility(col.id)}
               />
               {col.title}
-            </option>
+            </div>
           ))}
-        </select>
+        </div>
       </div>
 
            
@@ -96,9 +96,9 @@ function App() {
             <tr>
               <th>Item Name</th>
               {columns.length > 0 &&
-        columns.map((col, idx) => {
-          if (columnVisibility[idx]) {
-            return <th key={idx}>{col.title}</th>;
+        columns.map((col) => {
+          if (columnVisibility[col.id]) {
+            return <th key={col.id}>{col.title}</th>;
           }
           return null;
         })}
@@ -108,10 +108,10 @@ function App() {
             
           {items.map((item, rowIndex) => (
       <tr key={rowIndex}>
-        <td>{items.name}</td>
-        {item.column_values.map((col, colIndex) => {
-          if (columnVisibility[colIndex]) {
-            return <td key={colIndex}>{col.text}</td>;
+        <td>{item.name}</td>
+        {item.column_values.map((col) => {
+          if (columnVisibility[col.id]) {
+            return <td key={col.id}>{col.text}</td>;
           }
           return null;
         })}
