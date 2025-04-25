@@ -6,20 +6,12 @@ function App() {
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
   //const [boardId, setBoardId] = useState(null);
-  const [visibleColumns, setVisibleColumns] = useState(columns.map(() => true)); // By default, all columns are visible
-
-  const toggleColumnVisibility = (index) => {
-    setVisibleColumns((prev) => {
-      const newVisibleColumns = [...prev];
-      newVisibleColumns[index] = !newVisibleColumns[index]; // Toggle the visibility for the column at index
-      return newVisibleColumns;
-    });
-  };
+  const [columnVisibility, setColumnVisibility] = useState(columns.map(() => true)); // By default, all columns are visible
 
   useEffect(() => {
     // Listen for the board context
     monday.listen("context", async (res) => {
-      const boardId = res.data.boardIds[0]; // Assuming you get an array of boardIds, use the first one
+      //const boardId = res.data.boardIds[0]; // Assuming you get an array of boardIds, use the first one
       //setBoardId(boardId); // Store the boardId in the state
 
       // Fetch data using fetch API
@@ -60,48 +52,52 @@ function App() {
           const board = data.data.boards[0];
           setColumns(board.columns); // Set the columns
           setItems(board.items_page.items); // Set the items
-          console.log("Fetched columns:", board.columns);
-          console.log("Fetched items:", board.items_page.items);
-        });
 
-        // Debugging: Output column and item values
-       // board.items.forEach((item) => {
-          //console.log(`Item: ${item.name}`);
-          //item.column_values.forEach((colVal) => {
-           // console.log(`- ${colVal.id}: ${colVal.text}`);
-          //});
-       // });
-      
+          const initialVisibility = {};
+          board.columns.forEach(col => {
+            initialVisibility[col.id] = true; // Start all columns as visible
+          });
+          setColumnVisibility(initialVisibility);
+        });      
     });
   }, []);
+
+  const toggleColumnVisibility = (colId) => {
+    setColumnVisibility(prevState => ({
+      ...prevState,
+      [colId]: !prevState[colId],
+    }));
+  };
 
   return (
     
     
     <div style={{ padding: "1rem" }}>
+      <h2><span>📊</span> Dashboard Widget Viewer</h2>
       <div>
-  {columns.map((column, idx) => (
-    <div key={column.id}>
-      <label>
-        <input
-          type="checkbox"
-          checked={visibleColumns[idx]} // Check if the column is visible
-          onChange={() => toggleColumnVisibility(idx)} // Toggle visibility when clicked
-        />
-        {column.title}
-      </label>
-    </div>
-  ))}
-</div>
+        <label>Column Visibility:</label>
+        <select style={{ margin: "1rem 0" }}>
+          {columns.map((col) => (
+            <option key={col.id}>
+              <input
+                type="checkbox"
+                checked={columnVisibility[col.id]}
+                onChange={() => toggleColumnVisibility(col.id)}
+              />
+              {col.title}
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <h2><span>📊</span> Dashboard Widget Viewer</h2>     
+           
         <table border="1" cellPadding="5">
           <thead>
             <tr>
               <th>Item Name</th>
               {columns.length > 0 &&
         columns.map((col, idx) => {
-          if (visibleColumns[idx]) {
+          if (columnVisibility[idx]) {
             return <th key={idx}>{col.title}</th>;
           }
           return null;
@@ -109,11 +105,12 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            <td>{items.name}</td>
+            
           {items.map((item, rowIndex) => (
       <tr key={rowIndex}>
+        <td>{items.name}</td>
         {item.column_values.map((col, colIndex) => {
-          if (visibleColumns[colIndex]) {
+          if (columnVisibility[colIndex]) {
             return <td key={colIndex}>{col.text}</td>;
           }
           return null;
