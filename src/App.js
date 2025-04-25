@@ -35,6 +35,8 @@ function App() {
                 column_values {
                   id
                   text
+                  type
+                  value
                 }
               }
             }
@@ -188,14 +190,20 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            
           {items.map((item, rowIndex) => (
       <tr key={rowIndex}>
         <td>{item.name}</td>
         {item.column_values.map((col) => {
           if (columnVisibility[col.id]) {
+            if (col.type === 'mirror' && col.value) {
+              return (
+                <td key={col.id}>
+                        {col.value && col.value.text ? col.value.text : ''}
+                      </td>
+                    );
+                  } 
             return <td key={col.id}>{col.text}</td>;
-          }
+            }
           return null;
         })}
       </tr>
