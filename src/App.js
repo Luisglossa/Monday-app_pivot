@@ -39,7 +39,7 @@ function App() {
           }
         }
       `;
-        fetch ("https://api.monday.com/v2", {
+      fetch ("https://api.monday.com/v2", {
           method: 'post',
           headers: {
             'Content-Type': 'application/json',
@@ -49,14 +49,14 @@ function App() {
           body: JSON.stringify({ 'query' : query }),
         })
         .then(res => res.json())
-        .then(res => console.log(JSON.stringify(res, null, 2)));
-        
-        const data = await res.json();
-        const board = data.data.boards[0];
-        setColumns(board.columns); // Set the columns
-        setItems(board.items); // Set the items
-        console.log("Fetched columns:", board.columns);
-        console.log("Fetched items:", board.items);
+        .then(data => {
+          console.log(JSON.stringify(data, null, 2));
+          const board = data.data.boards[0];
+          setColumns(board.columns); // Set the columns
+          setItems(board.items); // Set the items
+          console.log("Fetched columns:", board.columns);
+          console.log("Fetched items:", board.items);
+        });
 
         // Debugging: Output column and item values
        // board.items.forEach((item) => {
