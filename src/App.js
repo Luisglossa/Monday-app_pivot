@@ -106,10 +106,14 @@ function App() {
         options={columnOptions}
         value={selectedColumns}
         onChange={handleColumnChange}
+        onMenuOpen={() => setDropdownOpen(true)}
+        onMenuClose={() => setDropdownOpen(false)}
+        styles={customStyles}
+        closeMenuOnSelect={false}
         placeholder="Toggle column visibility..."
       />        
       </div>
-                 
+
         <table border="1" cellPadding="5">
           <thead>
             <tr>
