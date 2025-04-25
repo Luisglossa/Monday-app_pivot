@@ -9,6 +9,7 @@ function App() {
   //const [boardId, setBoardId] = useState(null);
   const [columnVisibility, setColumnVisibility] = useState(columns.map(() => true)); // By default, all columns are visible
   const [selectedColumns, setSelectedColumns] = useState([]);
+  const [showPanel, setShowPanel] = useState(false);
 
   useEffect(() => {
     // Listen for the board context
@@ -99,20 +100,44 @@ function App() {
     
     <div style={{ padding: "1rem" }}>
       <h2><span>📊</span> Dashboard Widget Viewer</h2>
-      <div>
-        <label>Column Visibility: </label>
-        <Select
+      <button
+    onClick={() => setShowPanel(!showPanel)}
+    style={{
+      background: "#0073ea",
+      color: "white",
+      border: "none",
+      padding: "0.5rem 1rem",
+      borderRadius: "6px",
+      cursor: "pointer",
+    }}
+  >
+    {showPanel ? "Hide Column Selector" : "Show Column Selector"}
+  </button>
+
+  {showPanel && (
+    <div
+      style={{
+        marginTop: "0.5rem",
+        border: "1px solid #ccc",
+        padding: "1rem",
+        borderRadius: "8px",
+        background: "#f9f9f9",
+      }}
+    >
+      <label style={{ display: "block", marginBottom: "0.5rem" }}>
+        Select Visible Columns:
+      </label>
+      <Select
         isMulti
         options={columnOptions}
         value={selectedColumns}
         onChange={handleColumnChange}
-        onMenuOpen={() => setDropdownOpen(true)}
-        onMenuClose={() => setDropdownOpen(false)}
         styles={customStyles}
+        placeholder="Choose columns..."
         closeMenuOnSelect={false}
-        placeholder="Toggle column visibility..."
-      />        
-      </div>
+      />
+    </div>
+  )}
 
         <table border="1" cellPadding="5">
           <thead>
