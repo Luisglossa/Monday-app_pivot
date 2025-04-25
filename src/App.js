@@ -41,6 +41,11 @@ function App() {
                     display_value
                     id
                   }
+                  ... on BoardRelationValue {
+                    linked_item_ids
+                    linked_items
+                    display_value
+                  }
                 }
               }
             }
@@ -201,11 +206,15 @@ function App() {
           if (columnVisibility[col.id]) {
             if (col.type === 'mirror') {
               return (
-                <td key={col.id}>
-                        {col.display_value ? col.display_value : ''}
-                      </td>
-                    );
-                  } 
+                <td key={col.id}>{col.display_value ? col.display_value : ''}</td>
+              );
+            }
+            if (col.type === 'board_relation') {
+              return (
+                <td key={col.id}>{col.display_value ? col.display_value : ''}</td>
+              );
+            }
+            
             return <td key={col.id}>{col.text}</td>;
             }
           return null;
