@@ -94,6 +94,29 @@ function App() {
     setColumnVisibility(visibility);
   }, [columns]);
 
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      minHeight: '40px',
+      borderColor: '#888',
+      boxShadow: 'none',
+      '&:hover': {
+        borderColor: '#444',
+      },
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#666',
+    }),
+    multiValue: () => ({
+      display: 'none', // hides the selected items from showing
+    }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 10,
+    }),
+  };
+
 
   return (
     
