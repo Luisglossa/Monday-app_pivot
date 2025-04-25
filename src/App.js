@@ -42,9 +42,8 @@ function App() {
                     id
                   }
                   ... on BoardRelationValue {
-                    linked_item_ids
-                    linked_items
                     display_value
+                    id
                   }
                 }
               }
