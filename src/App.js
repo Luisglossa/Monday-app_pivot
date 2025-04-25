@@ -19,7 +19,12 @@ function App() {
           boards(ids: 1702544988) {
           name
           id
-          description  
+          description
+          columns {
+            id
+            title
+            type
+          }  
           items_page{
               
               items {
@@ -27,7 +32,6 @@ function App() {
                 name
                 column_values {
                   id
-                  title
                   text
                 }
               }
