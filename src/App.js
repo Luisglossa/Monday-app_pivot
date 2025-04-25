@@ -44,7 +44,7 @@ function App() {
           method: 'post',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'APIkey', // Replace with your Monday.com API key
+            'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjQ5NzcxNzIyNSwiYWFpIjoxMSwidWlkIjo3MTkwNjEwMCwiaWFkIjoiMjAyNS0wNC0wOVQxMzo0Nzo0Mi4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjQ5NjgwNTcsInJnbiI6ImV1YzEifQ.lqrSr9M9YPx0lKPOYYhOsF41o-KMcd1PQHa5lCDv6Zk', // Replace with your Monday.com API key
             'API-Version': '2023-10', // Specify the API version
           },
           body: JSON.stringify({ 'query' : query }),
