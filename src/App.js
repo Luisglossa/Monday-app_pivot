@@ -23,7 +23,8 @@ function App() {
               title
               type
             }  
-              
+            items_page {
+              cursor  
               items {
                 id
                 name
@@ -32,7 +33,7 @@ function App() {
                   text
                 }
               }
-            
+            }
           }
         }`;
       fetch ("https://api.monday.com/v2", {
