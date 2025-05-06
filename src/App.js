@@ -191,7 +191,7 @@ function App() {
               {columns.length > 0 &&
         columns.map((col) => {
           if (columnVisibility[col.id]) {
-            return <th style="wdith:8rem; height:7rem;" key={col.id}>{col.title}</th>;
+            return <th key={col.id} style={{width: '8rem', height:'7rem'}}>{col.title}</th>;
           }
           return null;
         })}
