@@ -184,7 +184,7 @@ function App() {
     </div>
   )}
 
-        <table  className="custom-table" border="1" cellPadding="0" style={{borderCollapse: 'collapse'}}>
+        <table  className="custom-table" border="1" cellPadding="5" style={{borderCollapse: 'collapse'}}>
           <thead >
             <tr>
               
@@ -205,16 +205,16 @@ function App() {
           if (columnVisibility[col.id]) {
             if (col.type === 'mirror') {
               return (
-                <td key={col.id}>{col.display_value ? col.display_value : ''}</td>
+                <td key={col.id} style={{width: '8rem', height:'7rem'}}>{col.display_value ? col.display_value : ''}</td>
               );
             }
             if (col.type === 'board_relation') {
               return (
-                <td key={col.id}>{col.display_value ? col.display_value : ''}</td>
+                <td key={col.id} style={{width: '8rem', height:'7rem'}}>{col.display_value ? col.display_value : ''}</td>
               );
             }
             
-            return <td key={col.id}>{col.text}</td>;
+            return <td key={col.id} style={{width: '8rem', height:'7rem'}}>{col.text}</td>;
             }
           return null;
         })}
