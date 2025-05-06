@@ -143,7 +143,7 @@ function App() {
     
     
     <div style={{ padding: "1rem" }}>
-      <h2><span>:bar_chart:</span> Dashboard Widget Viewer</h2>
+      <h2> Dashboard Widget Viewer</h2>
       <button
     onClick={() => setShowPanel(!showPanel)}
     style={{
@@ -184,14 +184,14 @@ function App() {
     </div>
   )}
 
-        <table  className="custom-table" border="1" cellPadding="5">
-          <thead>
+        <table  className="custom-table" border="1" cellPadding="0" style="border-collapse: collapse;">
+          <thead >
             <tr>
               
               {columns.length > 0 &&
         columns.map((col) => {
           if (columnVisibility[col.id]) {
-            return <th key={col.id}>{col.title}</th>;
+            return <th style="wdith:8rem; height:7rem;" key={col.id}>{col.title}</th>;
           }
           return null;
         })}
