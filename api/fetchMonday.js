@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     const response = await fetch('https://api.monday.com/v2', {
       method: 'POST',
       headers: {
-        'Authorization': process.env.MONDAY_API_KEY,
+        'Authorization': process.env.M_api,
         'Content-Type': 'application/json',
         'API-Version': '2023-10'
       },
