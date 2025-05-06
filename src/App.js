@@ -143,7 +143,7 @@ function App() {
     
     
     <div style={{ padding: "1rem" }}>
-      <h2><span>📊</span> Dashboard Widget Viewer</h2>
+      <h2><span>:bar_chart:</span> Dashboard Widget Viewer</h2>
       <button
     onClick={() => setShowPanel(!showPanel)}
     style={{
@@ -228,4 +228,3 @@ function App() {
 }
 
 export default App;
-  
