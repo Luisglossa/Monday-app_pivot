@@ -184,14 +184,14 @@ function App() {
     </div>
   )}
 
-        <table  className="custom-table" border="1" cellPadding="5" style={{borderCollapse: 'collapse'}}>
+        <table  className="custom-table" border="1" cellPadding="5">
           <thead >
             <tr>
               
               {columns.length > 0 &&
         columns.map((col) => {
           if (columnVisibility[col.id]) {
-            return <th key={col.id} style={{width: '8rem', height:'7rem'}}>{col.title}</th>;
+            return <th key={col.id} style={{width: 125+'px', height:110+'px'}}>{col.title}</th>;
           }
           return null;
         })}
@@ -205,16 +205,16 @@ function App() {
           if (columnVisibility[col.id]) {
             if (col.type === 'mirror') {
               return (
-                <td key={col.id} style={{width: '8rem', height:'7rem'}}>{col.display_value ? col.display_value : ''}</td>
+                <td key={col.id} style={{width: 125+'px', height:110+'px'}}>{col.display_value ? col.display_value : ''}</td>
               );
             }
             if (col.type === 'board_relation') {
               return (
-                <td key={col.id} style={{width: '8rem', height:'7rem'}}>{col.display_value ? col.display_value : ''}</td>
+                <td key={col.id} style={{width: 125+'px', height:110+'px'}}>{col.display_value ? col.display_value : ''}</td>
               );
             }
             
-            return <td key={col.id} style={{width: '8rem', height:'7rem'}}>{col.text}</td>;
+            return <td key={col.id} style={{width: 125+'px', height:110+'px'}}>{col.text}</td>;
             }
           return null;
         })}
