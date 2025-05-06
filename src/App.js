@@ -184,7 +184,7 @@ function App() {
     </div>
   )}
 
-        <table  className="custom-table" border="1" cellPadding="0" style="border-collapse: collapse;">
+        <table  className="custom-table" border="1" cellPadding="0" style={{borderCollapse: 'collapse'}}>
           <thead >
             <tr>
               
