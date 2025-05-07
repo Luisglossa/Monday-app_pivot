@@ -103,7 +103,10 @@ function App() {
   }));
 
   const handleColumnChange = (selectedOptions) => {
-    setSelectedColumns(selectedOptions);
+    const sortedSelected = columnOptions.filter(opt =>
+      selectedOptions.some(sel => sel.value === opt.value)
+    );
+    setSelectedColumns(sortedSelected);
 
     const newVisibility = {};
     columns.forEach(col => {
@@ -143,10 +146,15 @@ function App() {
     }),
     multiValue: () => ({
       backgroundColor: "#f0f0f0",
+      display: "flex",
+
     }),
     menu: (provided) => ({
       ...provided,
       zIndex: 10,
+    }),
+    multiValueRemove: (provided) => ({
+      ...provided,
     }),
   };
 
@@ -187,6 +195,7 @@ function App() {
       <Select
         isMulti
         options={columnOptions}
+        defaultValue={columnOptions[0]}
         value={selectedColumns}
         onChange={handleColumnChange}
         styles={customStyles}
