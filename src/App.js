@@ -26,24 +26,26 @@ function App() {
               id
               title
               type
-            }  
-            items_page {
-              cursor  
-              items {
-                id
-                name
-                column_values {
+            }
+            groups {  
+              items_page {
+                cursor  
+                items {
                   id
-                  text
-                  type
-                  value
-                  ... on MirrorValue {
-                    display_value
+                  name
+                  column_values {
                     id
-                  }
-                  ... on BoardRelationValue {
-                    display_value
-                    id
+                    text
+                    type
+                    value
+                    ... on MirrorValue {
+                      display_value
+                      id
+                    }
+                    ... on BoardRelationValue {
+                      display_value
+                      id
+                    }
                   }
                 }
               }
@@ -64,14 +66,14 @@ function App() {
           console.log(JSON.stringify(data, null, 2));
           const board = data.data.boards[0];
           setColumns(board.columns); // Set the columns
-          setItems(board.items_page.items); // Set the items
+          setItems(board.groups.items_page.items); // Set the items
 
           // Set initial column visibility to true for all columns
-          //const initialVisibility = {};
-          //board.columns.forEach(col => {
-            //initialVisibility[col.id] = true; // Start all columns as visible
-          //});
-          //setColumnVisibility(initialVisibility);
+          const initialVisibility = {};
+          board.columns.forEach(col => {
+            initialVisibility[col.id] = true; // Start all columns as visible
+          });
+          setColumnVisibility(initialVisibility);
 
           monday.get("settings").then((res) => {
             const storedColumns = res.data.columnsPerBoard?.[boardId] || [];
