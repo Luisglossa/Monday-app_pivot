@@ -147,10 +147,11 @@ function App() {
       ...provided,
       color: '#666',
     }),
+    
     multiValue: () => ({
       backgroundColor: "#f0f0f0",
       display: "flex",
-
+      margin: "3px 5px",
     }),
     menu: (provided) => ({
       ...provided,
