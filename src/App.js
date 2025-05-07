@@ -67,11 +67,11 @@ function App() {
           setItems(board.items_page.items); // Set the items
 
           // Set initial column visibility to true for all columns
-          const initialVisibility = {};
-          board.columns.forEach(col => {
-            initialVisibility[col.id] = true; // Start all columns as visible
-          });
-          setColumnVisibility(initialVisibility);
+          //const initialVisibility = {};
+          //board.columns.forEach(col => {
+            //initialVisibility[col.id] = true; // Start all columns as visible
+          //});
+          //setColumnVisibility(initialVisibility);
 
           monday.get("settings").then((res) => {
             const storedColumns = res.data.columnsPerBoard?.[boardId] || [];
@@ -104,12 +104,7 @@ function App() {
     isDisabled: col.title === "Name",
   }));
 
-  const handleColumnChange = (selectedOptions) => {
-    //const nameCol = columns.find(col => col.title === "Name");
-    //if (nameCol) {
-    //  selectedIds.add(nameCol.id);
-    //}
-    
+  const handleColumnChange = (selectedOptions) => {   
     const sortedSelected = columnOptions.filter(opt =>
       selectedOptions.some(sel => sel.value === opt.value)
     );
