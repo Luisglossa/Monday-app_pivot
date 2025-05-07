@@ -206,6 +206,7 @@ function App() {
         defaultValue={columnOptions[0]}
         value={selectedColumns}
         onChange={handleColumnChange}
+        isClearable={false}
         styles={customStyles}
         placeholder="Choose columns..."
         closeMenuOnSelect={false}
