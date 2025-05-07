@@ -261,10 +261,10 @@ function App() {
         </div>
       )}
       {visibleDivs.pg2 && (<div id="pg2">
-
+        <h2>EXAPLE FOR ADDING REPORT</h2>
        </div>
       )}
-        <h2>EXAPLE FOR ADDING REPORT</h2>
+        
     </div>
   );
 }
