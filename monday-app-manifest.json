@@ -1,0 +1,14 @@
+{
+    "name": "Dashboard Widget App",
+    "features": [
+      {
+        "type": "widget",
+        "name": "Dashboard Widget",
+        "widgetType": "board",
+        "settings": {
+          "columnsPerBoard": {}
+        }
+      }
+    ]
+  }
+  

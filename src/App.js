@@ -6,16 +6,16 @@ const monday = mondaySdk();
 function App() {
   const [items, setItems] = useState([]);
   const [columns, setColumns] = useState([]);
-  //const [boardId, setBoardId] = useState(null);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [showPanel, setShowPanel] = useState(false);
+  const [boardId, setBoardId] = useState(null);
 
   useEffect(() => {
     // Listen for the board context
     monday.listen("context", async (res) => {
-      //const boardId = res.data.boardIds[0]; // Assuming you get an array of boardIds, use the first one
-      //setBoardId(boardId); // Store the boardId in the state
+      const boardId = res.data.boardIds[0];
+      setBoardId(boardId);
 
       // Fetch data using fetch API
       let query = `{
@@ -66,12 +66,18 @@ function App() {
           setColumns(board.columns); // Set the columns
           setItems(board.items_page.items); // Set the items
 
-          // Set initial column visibility to true for all columns
-          const initialVisibility = {};
-          board.columns.forEach(col => {
-            initialVisibility[col.id] = true; // Start all columns as visible
+          monday.get("settings").then((res) => {
+            const storedColumns = res.data.columnsPerBoard?.[boardId] || [];
+          
+            const selected = board.columns.filter(col => storedColumns.includes(col.id));
+            setSelectedColumns(selected);
+          
+            const newVisibility = {};
+            board.columns.forEach(col => {
+              newVisibility[col.id] = storedColumns.includes(col.id);
+            });
+            setColumnVisibility(newVisibility);
           });
-          setColumnVisibility(initialVisibility);
 
           // Initialize selected columns for the dropdown
           const columnOptions = board.columns.map(col => ({
@@ -97,13 +103,27 @@ function App() {
 
   const handleColumnChange = (selectedOptions) => {
     setSelectedColumns(selectedOptions);
-    
-    // Update column visibility based on selected options
+
     const newVisibility = {};
     columns.forEach(col => {
-      newVisibility[col.id] = selectedOptions.some(option => option.value === col.id);
+      newVisibility[col.id] = selectedOptions.some(opt => opt.value === col.id);
     });
     setColumnVisibility(newVisibility);
+
+  // Save to settings
+  const selectedIds = selectedOptions.map(opt => opt.value);
+
+  monday.get("settings").then((res) => {
+    const settings = res.data;
+    const updatedColumnsPerBoard = {
+      ...(settings.columnsPerBoard || {}),
+      [boardId]: selectedIds
+    };
+
+    monday.set("settings", {
+      columnsPerBoard: updatedColumnsPerBoard
+    });
+  });
   };
 
   //useEffect(() => {
