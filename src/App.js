@@ -66,6 +66,13 @@ function App() {
           setColumns(board.columns); // Set the columns
           setItems(board.items_page.items); // Set the items
 
+          // Set initial column visibility to true for all columns
+          const initialVisibility = {};
+          board.columns.forEach(col => {
+            initialVisibility[col.id] = true; // Start all columns as visible
+          });
+          setColumnVisibility(initialVisibility);
+
           monday.get("settings").then((res) => {
             const storedColumns = res.data.columnsPerBoard?.[boardId] || [];
           
