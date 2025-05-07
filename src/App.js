@@ -88,7 +88,8 @@ function App() {
           } else {
             const columnOptions = board.columns.map(col => ({
               value: col.id,
-              label: col.title
+              label: col.title,
+              isDisabled: col.title === "Name",
             }));
             setSelectedColumns(columnOptions); // Select all columns initially
           }
@@ -99,7 +100,8 @@ function App() {
 
   const columnOptions = columns.map(col => ({
     value: col.id,
-    label: col.title
+    label: col.title,
+    isDisabled: col.title === "Name",
   }));
 
   const handleColumnChange = (selectedOptions) => {
