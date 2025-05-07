@@ -105,10 +105,10 @@ function App() {
   }));
 
   const handleColumnChange = (selectedOptions) => {
-    const nameCol = columns.find(col => col.title === "Name");
-    if (nameCol) {
-      selectedIds.add(nameCol.id);
-    }
+    //const nameCol = columns.find(col => col.title === "Name");
+    //if (nameCol) {
+    //  selectedIds.add(nameCol.id);
+    //}
     
     const sortedSelected = columnOptions.filter(opt =>
       selectedOptions.some(sel => sel.value === opt.value)
