@@ -10,6 +10,7 @@ function App() {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [showPanel, setShowPanel] = useState(false);
   const [boardId, setBoardId] = useState(null);
+  const [visibleDivs, setVisibleDivs] = useState({pg1: true, pg2: false});
 
   useEffect(() => {
     // Listen for the board context
@@ -161,12 +162,23 @@ function App() {
     }),
   };
 
+  const toggleDiv = (Divid) => {
+    setVisibleDivs(prev => {
+      const updated = { ...prev };
+      Divid.forEach(id => {
+        updated[id] = !prev[id];
+    });
+    return updated;
+    });
+  };
+
 
   return (
     
     
     <div style={{ padding: "1rem" }}>
-      <h2> Dashboard Widget Viewer</h2>
+      <button onClick={() => toggleDiv(['pg1','pg2']) }>{visibleDivs.pg1 ? "Show report" : "Show Board Data"}</button>
+      {visibleDivs.pg1 && (<div id="pg1">
       <button
     onClick={() => setShowPanel(!showPanel)}
     style={{
@@ -181,7 +193,6 @@ function App() {
   >
     {showPanel ? "Hide Column Selector" : "Show Column Selector"}
   </button>
-
   {showPanel && (
     <div
       style={{
@@ -247,7 +258,13 @@ function App() {
     ))}
           </tbody>
         </table>
-      
+        </div>
+      )}
+      {visibleDivs.pg2 && (<div id="pg2">
+
+       </div>
+      )}
+        <h2>EXAPLE FOR ADDING REPORT</h2>
     </div>
   );
 }
