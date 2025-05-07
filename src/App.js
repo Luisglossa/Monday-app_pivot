@@ -17,10 +17,10 @@ function App() {
     monday.listen("context", async (res) => {
       const boardId = res.data.boardIds[0];
       setBoardId(boardId);
-
+      //(ids: 1702544988)
       // Fetch data using fetch API
       let query = `{
-          boards(ids: 1702544988) {
+          boards {
             name
             id
             columns {
@@ -177,18 +177,29 @@ function App() {
     
     
     <div style={{ padding: "1rem" }}>
-      <button onClick={() => toggleDiv(['pg1','pg2']) }>{visibleDivs.pg1 ? "Show report" : "Show Board Data"}</button>
+      <h2></h2>
+      <button 
+      style={{
+        background: "#0073ea",
+        color: "white",
+        border: "none",
+        padding: "0.5rem 1rem",
+        borderRadius: "6px",
+        cursor: "pointer",
+        margin: "10px 0px",
+      }}
+      onClick={() => toggleDiv(['pg1','pg2']) }>{visibleDivs.pg1 ? "Show report" : "Show Board Data"}</button>
       {visibleDivs.pg1 && (<div id="pg1">
       <button
     onClick={() => setShowPanel(!showPanel)}
     style={{
-      background: "#0073ea",
-      color: "white",
+      background: "#f1f1f1",
+      color: "black",
       border: "none",
-      padding: "0.5rem 1rem",
+      padding: "0.5rem 0.6rem",
       borderRadius: "6px",
       cursor: "pointer",
-      margin: "10px 0px",
+      margin: "15px 0px",
     }}
   >
     {showPanel ? "Hide Column Selector" : "Show Column Selector"}
@@ -227,7 +238,7 @@ function App() {
               {columns.length > 0 &&
         columns.map((col) => {
           if (columnVisibility[col.id]) {
-            return <th key={col.id} style={{width: 125+'px', height:110+'px'}}>{col.title}</th>;
+            return <th key={col.id} style={{width: "33%", height:"33%"}}>{col.title}</th>;
           }
           return null;
         })}
@@ -241,16 +252,16 @@ function App() {
           if (columnVisibility[col.id]) {
             if (col.type === 'mirror') {
               return (
-                <td key={col.id} style={{width: 125+'px', height:110+'px'}}>{col.display_value ? col.display_value : ''}</td>
+                <td key={col.id} style={{width: "33%", height:"33%"}}>{col.display_value ? col.display_value : ''}</td>
               );
             }
             if (col.type === 'board_relation') {
               return (
-                <td key={col.id} style={{width: 125+'px', height:110+'px'}}>{col.display_value ? col.display_value : ''}</td>
+                <td key={col.id} style={{width: "33%", height:"33%"}}>{col.display_value ? col.display_value : ''}</td>
               );
             }
             
-            return <td key={col.id} style={{width: 125+'px', height:110+'px'}}>{col.text}</td>;
+            return <td key={col.id} style={{width: "33%", height:"33%"}}>{col.text}</td>;
             }
           return null;
         })}
