@@ -17,10 +17,10 @@ function App() {
     monday.listen("context", async (res) => {
       const boardId = res.data.boardIds[0];
       setBoardId(boardId);
-      //(ids: 1702544988)
+      // /(ids: 1702544988)
       // Fetch data using fetch API
       let query = `{
-          boards {
+          boards(ids: ${boardId}) {
             name
             id
             columns {
