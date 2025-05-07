@@ -76,6 +76,7 @@ function App() {
           monday.get("settings").then((res) => {
             const storedColumns = res.data.columnsPerBoard?.[boardId] || [];
           
+            if (storedColumns && storedColumns.length > 0) {
             const selected = board.columns.filter(col => storedColumns.includes(col.id));
             setSelectedColumns(selected);
           
@@ -84,24 +85,17 @@ function App() {
               newVisibility[col.id] = storedColumns.includes(col.id);
             });
             setColumnVisibility(newVisibility);
-          });
-
-          // Initialize selected columns for the dropdown
-          const columnOptions = board.columns.map(col => ({
-            value: col.id,
-            label: col.title
-          }));
-          setSelectedColumns(columnOptions); // Select all columns initially
+          } else {
+            const columnOptions = board.columns.map(col => ({
+              value: col.id,
+              label: col.title
+            }));
+            setSelectedColumns(columnOptions); // Select all columns initially
+          }
+          });          
         });      
     });
   }, []);
-
-  const toggleColumnVisibility = (colId) => {
-    setColumnVisibility(prevState => ({
-      ...prevState,
-      [colId]: !prevState[colId],
-    }));
-  };
 
   const columnOptions = columns.map(col => ({
     value: col.id,
@@ -133,15 +127,6 @@ function App() {
   });
   };
 
-  //useEffect(() => {
-    //setSelectedColumns(columnOptions);
-    //const visibility = {};
-    //columnOptions.forEach(opt => {
-      //visibility[opt.value] = true;
-    //});
-    //setColumnVisibility(visibility);
-  //}, [columns]);
-
   const customStyles = {
     control: (provided) => ({
       ...provided,
@@ -157,7 +142,7 @@ function App() {
       color: '#666',
     }),
     multiValue: () => ({
-      display: 'none', // hides the selected items from showing
+      backgroundColor: "#f0f0f0",
     }),
     menu: (provided) => ({
       ...provided,
