@@ -105,6 +105,11 @@ function App() {
   }));
 
   const handleColumnChange = (selectedOptions) => {
+    const nameCol = columns.find(col => col.title === "Name");
+    if (nameCol) {
+      selectedIds.add(nameCol.id);
+    }
+    
     const sortedSelected = columnOptions.filter(opt =>
       selectedOptions.some(sel => sel.value === opt.value)
     );
@@ -155,8 +160,9 @@ function App() {
       ...provided,
       zIndex: 10,
     }),
-    multiValueRemove: (provided) => ({
+    multiValueRemove: (provided,state) => ({
       ...provided,
+      display: state.data.label === "Name" ? "none" : "unset"
     }),
   };
 
