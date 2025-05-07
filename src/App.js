@@ -74,6 +74,12 @@ function App() {
           });
           setColumnVisibility(initialVisibility);
 
+          monday.listen("settings", res => {
+            const appliedFilters = res.data;
+            console.log("User filters:", appliedFilters);
+            // You can use this to filter your displayed data
+          });
+
           monday.get("settings").then((res) => {
             const storedColumns = res.data.columnsPerBoard?.[boardId] || [];
           

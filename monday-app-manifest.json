@@ -1,10 +1,11 @@
 {
-    "name": "Dashboard Widget App",
+    "name": "monday-pivot",
     "features": [
       {
         "type": "widget",
         "name": "Dashboard Widget",
         "widgetType": "board",
+        "supports": ["filter"],
         "settings": {
           "columnsPerBoard": {}
         }
