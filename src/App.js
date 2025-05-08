@@ -3,7 +3,6 @@ import Select from 'react-select';
 import mondaySdk from "monday-sdk-js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format, parse, isAfter, isBefore, isEqual  } from "date-fns";
 
 const monday = mondaySdk();
 
@@ -193,10 +192,13 @@ function App() {
       }));
   };
 
- // const parseDateFromText = (text) => {
-    //if (!text) return null;
-   // return parse(`01 ${text}`, "dd mmm yy", new Date());  // "01 Apr 25"
-  //};
+  const parseDateFromText = (text) => {
+    if (!text) return null;
+    const [month, year] = text.split(" ");
+  const fullYear = parseInt(year.length === 2 ? `20${year}` : year, 10);
+
+  return new Date(`${month} 1, ${fullYear}`); // Ex: "Apr 1, 2025"
+  };
 
   //const dateOptions = [...new Set(items.map(item => {
     //const raw = item.column_values.find(col => col.title === "Event Month")?.text;
@@ -215,20 +217,11 @@ function App() {
   const applyDateFilter = () => {
     if (!startDateFilter || !endDateFilter) return; // Only apply if both dates are set
   
-    //const parsedStart = parseDateFromText(startDateFilter);
-    //const parsedEnd = parseDateFromText(endDateFilter);
-  
     const filtered = items.filter(item => {
       const raw = item.column_values.find(col => col.title === "Event Month")?.text;
-      if (!raw) return false;
-      const parsedDate = parse(raw, "MMM yy", new Date());
-      return (
-        (isAfter(parsedDate, startDateFilter) || isEqual(parsedDate, startDateFilter)) &&
-        (isBefore(parsedDate, endDateFilter) || isEqual(parsedDate, endDateFilter))
-      );
-      //const date = parseDateFromText(raw);
-      //if (!date) return false;
-      //return date >= startDateFilter  && date <= endDateFilter;
+      const date = parseDateFromText(raw);
+      if (!date) return false;
+      return date >= startDateFilter  && date <= endDateFilter;
     });
   
     setFilteredItems(filtered);
