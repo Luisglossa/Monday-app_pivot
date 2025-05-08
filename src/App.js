@@ -195,7 +195,7 @@ function App() {
   };
 
   const dateOptions = [...new Set(items.map(item => {
-    const raw = item.column_values.find(col => col.title === "Event Month")?.text;
+    const raw = item.column_values.find(col => col.id === "Event Month")?.text;
     return raw;
   }).filter(Boolean))];
   
