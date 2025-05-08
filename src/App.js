@@ -8,7 +8,7 @@ function App() {
   const [columns, setColumns] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const [showPanel, setShowPanel] = useState(false);
+  const [showPanel, setShowPanel] = useState({colpanel:false, filterpanel:false});
   const [boardId, setBoardId] = useState(null);
   const [visibleDivs, setVisibleDivs] = useState({pg1: true, pg2: false});
 
@@ -179,6 +179,32 @@ function App() {
     });
   };
 
+  const togglebuttons = (id) => {
+    setShowPanel(prev => ({
+        ...prev,
+        [id]: !prev[id]
+      }));
+  };
+
+  const parseDateFromText = (text) => {
+    if (!text) return null;
+    return new Date(`01 ${text}`);  // "01 Apr 25"
+  };
+
+  const dateOptions = [...new Set(items.map(item => {
+    const raw = item.column_values.find(col => col.id === "Event Month")?.text;
+    return raw;
+  }).filter(Boolean))];
+  
+  // Sort by real date
+  const sortedDateOptions = dateOptions.sort((a, b) =>
+    parseDateFromText(a) - parseDateFromText(b)
+  );
+  const filterOptions = sortedDateOptions.map(dateStr => ({
+    label: dateStr,
+    value: dateStr
+  }));
+
 
   return (
     
@@ -197,8 +223,8 @@ function App() {
       }}
       onClick={() => toggleDiv(['pg1','pg2']) }>{visibleDivs.pg1 ? "Show report" : "Show Board Data"}</button>
       {visibleDivs.pg1 && (<div id="pg1">
-      <button
-    onClick={() => setShowPanel(!showPanel)}
+      <button //Col Slector
+    onClick={() => togglebuttons('colpanel')}
     style={{
       background: "#f1f1f1",
       color: "black",
@@ -209,9 +235,49 @@ function App() {
       margin: "15px 0px",
     }}
   >
-    {showPanel ? "Hide Column Selector" : "Show Column Selector"}
+    {colpanel ? "Hide Column Selector" : "Show Column Selector"}
   </button>
-  {showPanel && (
+  {colpanel && (
+    <div
+      style={{
+        marginTop: "10px 0px",
+        border: "1px solid #ccc",
+        padding: "1rem",
+        borderRadius: "8px",
+        background: "#f9f9f9",
+      }}
+    >
+      <label style={{ display: "block", marginBottom: "0.5rem" }}>
+        Select Visible Columns:
+      </label>
+      <Select
+        isMulti
+        options={columnOptions}
+        defaultValue={columnOptions[0]}
+        value={selectedColumns}
+        onChange={handleColumnChange}
+        isClearable={false}
+        styles={customStyles}
+        placeholder="Choose columns..."
+        closeMenuOnSelect={false}
+      />
+    </div>
+  )}
+  <button //Filter
+    onClick={() => togglebuttons('filterpanel')}
+    style={{
+      background: "#f1f1f1",
+      color: "black",
+      border: "none",
+      padding: "0.5rem 0.6rem",
+      borderRadius: "6px",
+      cursor: "pointer",
+      margin: "15px 0px",
+    }}
+  >
+    {filterpanel ? "Hide Filters" : "Show Filters"}
+  </button>
+  {filterpanel && (
     <div
       style={{
         marginTop: "10px 0px",
