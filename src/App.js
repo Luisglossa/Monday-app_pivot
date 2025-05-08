@@ -209,10 +209,10 @@ function App() {
   }));
 
   const applyDateFilter = () => {
-    if (!startDate || !endDate) return; // Only apply if both dates are set
+    if (!startDateFilter || !endDateFilter) return; // Only apply if both dates are set
   
-    const parsedStart = parseDateFromText(startDate);
-    const parsedEnd = parseDateFromText(endDate);
+    const parsedStart = parseDateFromText(startDateFilter);
+    const parsedEnd = parseDateFromText(endDateFilter);
   
     const filtered = items.filter(item => {
       const raw = item.column_values.find(col => col.id === "Event Month")?.text;
@@ -315,15 +315,15 @@ function App() {
       <Select
       options={filterOptions}
       placeholder="Start Date"
-      value={filterOptions.find(opt => opt.value === startDate)}
-      onChange={(selected) => setStartDate(selected?.value || null)}
+      value={filterOptions.find(opt => opt.value === startDateFilter)}
+      onChange={(selected) => setStartDateFilter(selected?.value || null)}
       isClearable
     />
     <Select
       options={filterOptions}
       placeholder="End Date"
-      value={filterOptions.find(opt => opt.value === endDate)}
-      onChange={(selected) => setEndDate(selected?.value || null)}
+      value={filterOptions.find(opt => opt.value === endDateFilter)}
+      onChange={(selected) => setEndDateFilter(selected?.value || null)}
       isClearable
     />
     <button onClick={applyDateFilter}
