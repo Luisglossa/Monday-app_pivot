@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from 'react-select';
 import mondaySdk from "monday-sdk-js";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
 const monday = mondaySdk();
 
 function App() {
@@ -194,34 +191,34 @@ function App() {
 
   const parseDateFromText = (text) => {
     if (!text) return null;
-    const [month, year] = text.split(" ");
-  const fullYear = parseInt(year.length === 2 ? `20${year}` : year, 10);
-
-  return new Date(`${month} 1, ${fullYear}`); // Ex: "Apr 1, 2025"
+    return new Date(`01 ${text}`);  // "01 Apr 25"
   };
 
-  //const dateOptions = [...new Set(items.map(item => {
-    //const raw = item.column_values.find(col => col.title === "Event Month")?.text;
-    //return raw;
-  //}).filter(Boolean))];
+  const dateOptions = [...new Set(items.map(item => {
+    const raw = item.column_values.find(col => col.title === "Event Month")?.text;
+    return raw;
+  }).filter(Boolean))];
   
   // Sort by real date
-  //const sortedDateOptions = dateOptions.sort((a, b) =>
-    //parseDateFromText(a) - parseDateFromText(b)
-  //);
-  //const filterOptions = sortedDateOptions.map(dateStr => ({
-   // label: dateStr,
-   // value: dateStr
-  //}));
+  const sortedDateOptions = dateOptions.sort((a, b) =>
+    parseDateFromText(a) - parseDateFromText(b)
+  );
+  const filterOptions = sortedDateOptions.map(dateStr => ({
+    label: dateStr,
+    value: dateStr
+  }));
 
   const applyDateFilter = () => {
     if (!startDateFilter || !endDateFilter) return; // Only apply if both dates are set
+  
+    const parsedStart = parseDateFromText(startDateFilter);
+    const parsedEnd = parseDateFromText(endDateFilter);
   
     const filtered = items.filter(item => {
       const raw = item.column_values.find(col => col.title === "Event Month")?.text;
       const date = parseDateFromText(raw);
       if (!date) return false;
-      return date >= startDateFilter  && date <= endDateFilter;
+      return date >= parsedStart && date <= parsedEnd;
     });
   
     setFilteredItems(filtered);
@@ -316,18 +313,18 @@ function App() {
       }}
     >
       <label>Filter by Date Range:</label>
-      <DatePicker
-      selected={startDateFilter}
-      onChange={(date) => setStartDateFilter(date)}
-      placeholderText="Start Date"
-      dateFormat="dd MMM yyyy"
+      <Select
+      options={filterOptions}
+      placeholder="Start Date"
+      value={filterOptions.find(opt => opt.value === startDateFilter)}
+      onChange={(selected) => setStartDateFilter(selected?.value || null)}
       isClearable
     />
-    <DatePicker
-      selected={endDateFilter}
-      onChange={(date) => setEndDateFilter(date)}
-      placeholderText="End Date"
-      dateFormat="dd MMM yyyy"
+    <Select
+      options={filterOptions}
+      placeholder="End Date"
+      value={filterOptions.find(opt => opt.value === endDateFilter)}
+      onChange={(selected) => setEndDateFilter(selected?.value || null)}
       isClearable
     />
     <button onClick={applyDateFilter}
