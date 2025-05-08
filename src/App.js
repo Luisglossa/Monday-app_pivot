@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from 'react-select';
-//import { format, subMonths, startOfMonth } from 'date-fns';
+import { format, subMonths, startOfMonth } from 'date-fns';
 import mondaySdk from "monday-sdk-js";
 const monday = mondaySdk();
 
@@ -197,10 +197,21 @@ function App() {
     return new Date(`01 ${text}`);  // "01 Apr 25"
   };
 
-  const dateOptions = [...new Set(items.map(item => {
-    const raw = item.column_values.find(col => col.id === "Event Month")?.text;
-    return raw;
-  }).filter(Boolean))];
+  //const dateOptions = [...new Set(items.map(item => {
+    //const raw = item.column_values.find(col => col.id === "Event Month")?.text;
+    //return raw;
+  //}).filter(Boolean))];
+
+  const today = new Date();
+  const monthsBack = 12;
+  const dateOptions = Array.from({ length: monthsBack }).map((_, i) => {
+    const date = startOfMonth(subMonths(today, i));
+    return {
+      label: format(date, 'MMM yyyy'), // "Apr 2025"
+      value: format(date, 'yyyy-MM-dd'), // "2025-04-01"
+    };
+  }).reverse(); // Chronological order
+
   
   // Sort by real date
   const sortedDateOptions = dateOptions.sort((a, b) =>
