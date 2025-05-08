@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from 'react-select';
+//import { format, subMonths, startOfMonth } from 'date-fns';
 import mondaySdk from "monday-sdk-js";
 const monday = mondaySdk();
 
@@ -66,9 +67,11 @@ function App() {
         .then(res => res.json())
         .then(data => {
           console.log(JSON.stringify(data, null, 2));
+          if (data?.data?.boards?.length > 0){
           const board = data.data.boards[0];
           setColumns(board.columns); // Set the columns
           setItems(board.items_page.items); // Set the items
+          } else {console.error("No boards returned or invalid response:", data);}
 
           // Set initial column visibility to true for all columns
           const initialVisibility = {};
@@ -314,14 +317,14 @@ function App() {
     >
       <label>Filter by Date Range:</label>
       <Select
-      options={filterOptions}
+      options={dateOptions}
       placeholder="Start Date"
       value={filterOptions.find(opt => opt.value === startDateFilter)}
       onChange={(selected) => setStartDateFilter(selected?.value || null)}
       isClearable
     />
     <Select
-      options={filterOptions}
+      options={dateOptions}
       placeholder="End Date"
       value={filterOptions.find(opt => opt.value === endDateFilter)}
       onChange={(selected) => setEndDateFilter(selected?.value || null)}
