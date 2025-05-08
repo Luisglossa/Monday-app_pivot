@@ -13,6 +13,7 @@ function App() {
   const [visibleDivs, setVisibleDivs] = useState({pg1: true, pg2: false});
   const [startDateFilter, setStartDateFilter] = useState(null);
   const [endDateFilter, setEndDateFilter] = useState(null);
+  const [filteredItems, setFilteredItems] = useState([]);
 
   useEffect(() => {
     // Listen for the board context
@@ -207,6 +208,25 @@ function App() {
     value: dateStr
   }));
 
+  const applyDateFilter = () => {
+    if (!startDate || !endDate) return; // Only apply if both dates are set
+  
+    const parsedStart = parseDateFromText(startDate);
+    const parsedEnd = parseDateFromText(endDate);
+  
+    const filtered = items.filter(item => {
+      const raw = item.column_values.find(col => col.id === "Event Month")?.text;
+      const date = parseDateFromText(raw);
+      if (!date) return false;
+      return date >= parsedStart && date <= parsedEnd;
+    });
+  
+    setFilteredItems(filtered);
+  };
+  
+
+  const dataToRender = filteredItems.length > 0 ? filteredItems : items;
+
 
   return (
     
@@ -295,17 +315,28 @@ function App() {
       <Select
       options={filterOptions}
       placeholder="Start Date"
-      value={startDateFilter}
-      onChange={(selected) => setStartDateFilter(selected)}
+      value={filterOptions.find(opt => opt.value === startDate)}
+      onChange={(selected) => setStartDate(selected?.value || null)}
       isClearable
     />
     <Select
       options={filterOptions}
       placeholder="End Date"
-      value={endDateFilter}
-      onChange={(selected) => setEndDateFilter(selected)}
+      value={filterOptions.find(opt => opt.value === endDate)}
+      onChange={(selected) => setEndDate(selected?.value || null)}
       isClearable
     />
+    <button onClick={applyDateFilter}
+    style={{
+      background: "#fff",
+      color: "black",
+      border: "1px solid #000",
+      padding: "0.3rem 0.4rem",
+      borderRadius: "6px",
+      cursor: "pointer",
+      margin: "10px 5px 10px 0px",
+    }}
+    >Apply Filter</button>
     </div>
   )}
 
@@ -323,19 +354,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-          {items.filter((item) => {
-    const eventMonth = item.column_values.find(col => col.id === "Event Month")?.text;
-    if (!eventMonth) return false;
-
-    const date = parseDateFromText(eventMonth);
-    const start = startDateFilter ? parseDateFromText(startDateFilter.value) : null;
-    const end = endDateFilter ? parseDateFromText(endDateFilter.value) : null;
-
-    if (start && date < start) return false;
-    if (end && date > end) return false;
-    return true;
-  })
-  .map((item, rowIndex) => (
+          {dataToRender.map((item, rowIndex) => (
 
       <tr key={rowIndex}>
         <td>{item.name}</td>
