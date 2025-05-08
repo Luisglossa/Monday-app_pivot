@@ -67,11 +67,11 @@ function App() {
         .then(res => res.json())
         .then(data => {
           console.log(JSON.stringify(data, null, 2));
-          if (data?.data?.boards?.length > 0){
+          
           const board = data.data.boards[0];
           setColumns(board.columns); // Set the columns
           setItems(board.items_page.items); // Set the items
-          } else {console.error("No boards returned or invalid response:", data);}
+           
 
           // Set initial column visibility to true for all columns
           const initialVisibility = {};
