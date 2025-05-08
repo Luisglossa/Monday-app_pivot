@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "ag-grid-community": "^33.2.4",
     "ag-grid-react": "^33.2.4",
+    "date-fns": "^4.1.0",
     "monday-sdk-js": "^0.5.6",
     "react": "^19.1.0",
     "react-datepicker": "^8.3.0",
