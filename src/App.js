@@ -235,9 +235,9 @@ function App() {
       margin: "15px 0px",
     }}
   >
-    {colpanel ? "Hide Column Selector" : "Show Column Selector"}
+    {showPanel.colpanel ? "Hide Column Selector" : "Show Column Selector"}
   </button>
-  {colpanel && (
+  {showPanel.colpanel && (
     <div
       style={{
         marginTop: "10px 0px",
@@ -275,9 +275,9 @@ function App() {
       margin: "15px 0px",
     }}
   >
-    {filterpanel ? "Hide Filters" : "Show Filters"}
+    {showPanel.filterpanel ? "Hide Filters" : "Show Filters"}
   </button>
-  {filterpanel && (
+  {showPanel.filterpanel && (
     <div
       style={{
         marginTop: "10px 0px",
