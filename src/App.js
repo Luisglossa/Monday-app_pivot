@@ -11,6 +11,8 @@ function App() {
   const [showPanel, setShowPanel] = useState({colpanel:false, filterpanel:false});
   const [boardId, setBoardId] = useState(null);
   const [visibleDivs, setVisibleDivs] = useState({pg1: true, pg2: false});
+  const [startDateFilter, setStartDateFilter] = useState(null);
+  const [endDateFilter, setEndDateFilter] = useState(null);
 
   useEffect(() => {
     // Listen for the board context
@@ -232,7 +234,7 @@ function App() {
       padding: "0.5rem 0.6rem",
       borderRadius: "6px",
       cursor: "pointer",
-      margin: "15px 0px",
+      margin: "10px 5px 10px 0px",
     }}
   >
     {showPanel.colpanel ? "Hide Column Selector" : "Show Column Selector"}
@@ -272,7 +274,7 @@ function App() {
       padding: "0.5rem 0.6rem",
       borderRadius: "6px",
       cursor: "pointer",
-      margin: "15px 0px",
+      margin: "10px 5px 10px 0px",
     }}
   >
     {showPanel.filterpanel ? "Hide Filters" : "Show Filters"}
@@ -285,22 +287,25 @@ function App() {
         padding: "1rem",
         borderRadius: "8px",
         background: "#f9f9f9",
+        display: "flex", 
+        gap: "10px",
       }}
     >
-      <label style={{ display: "block", marginBottom: "0.5rem" }}>
-        Select Visible Columns:
-      </label>
+      <label>Filter by Date Range:</label>
       <Select
-        isMulti
-        options={columnOptions}
-        defaultValue={columnOptions[0]}
-        value={selectedColumns}
-        onChange={handleColumnChange}
-        isClearable={false}
-        styles={customStyles}
-        placeholder="Choose columns..."
-        closeMenuOnSelect={false}
-      />
+      options={filterOptions}
+      placeholder="Start Date"
+      value={startDateFilter}
+      onChange={(selected) => setStartDateFilter(selected)}
+      isClearable
+    />
+    <Select
+      options={filterOptions}
+      placeholder="End Date"
+      value={endDateFilter}
+      onChange={(selected) => setEndDateFilter(selected)}
+      isClearable
+    />
     </div>
   )}
 
@@ -318,7 +323,20 @@ function App() {
             </tr>
           </thead>
           <tbody>
-          {items.map((item, rowIndex) => (
+          {items.filter((item) => {
+    const eventMonth = item.column_values.find(col => col.id === "Event Month")?.text;
+    if (!eventMonth) return false;
+
+    const date = parseDateFromText(eventMonth);
+    const start = startDateFilter ? parseDateFromText(startDateFilter.value) : null;
+    const end = endDateFilter ? parseDateFromText(endDateFilter.value) : null;
+
+    if (start && date < start) return false;
+    if (end && date > end) return false;
+    return true;
+  })
+  .map((item, rowIndex) => (
+
       <tr key={rowIndex}>
         <td>{item.name}</td>
         {item.column_values.map((col) => {
