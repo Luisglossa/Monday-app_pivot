@@ -3,6 +3,8 @@ import Select from 'react-select';
 import mondaySdk from "monday-sdk-js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { format, parse, isAfter, isBefore, isEqual  } from "date-fns";
+
 const monday = mondaySdk();
 
 function App() {
@@ -191,10 +193,10 @@ function App() {
       }));
   };
 
-  const parseDateFromText = (text) => {
-    if (!text) return null;
-    return new Date(`01 ${text}`);  // "01 Apr 25"
-  };
+ // const parseDateFromText = (text) => {
+    //if (!text) return null;
+   // return parse(`01 ${text}`, "dd mmm yy", new Date());  // "01 Apr 25"
+  //};
 
   //const dateOptions = [...new Set(items.map(item => {
     //const raw = item.column_values.find(col => col.title === "Event Month")?.text;
@@ -218,9 +220,15 @@ function App() {
   
     const filtered = items.filter(item => {
       const raw = item.column_values.find(col => col.title === "Event Month")?.text;
-      const date = parseDateFromText(raw);
-      if (!date) return false;
-      return date >= startDateFilter  && date <= endDateFilter;
+      if (!raw) return false;
+      const parsedDate = parse(raw, "MMM yy", new Date());
+      return (
+        (isAfter(parsedDate, startDateFilter) || isEqual(parsedDate, startDateFilter)) &&
+        (isBefore(parsedDate, endDateFilter) || isEqual(parsedDate, endDateFilter))
+      );
+      //const date = parseDateFromText(raw);
+      //if (!date) return false;
+      //return date >= startDateFilter  && date <= endDateFilter;
     });
   
     setFilteredItems(filtered);
