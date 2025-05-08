@@ -195,7 +195,7 @@ function App() {
   };
 
   const dateOptions = [...new Set(items.map(item => {
-    const raw = item.column_values.find(col => col.id === "Event Month")?.text;
+    const raw = item.column_values.find(col => col.title === "Event Month")?.text;
     return raw;
   }).filter(Boolean))];
   
@@ -215,7 +215,7 @@ function App() {
     const parsedEnd = parseDateFromText(endDateFilter);
   
     const filtered = items.filter(item => {
-      const raw = item.column_values.find(col => col.id === "Event Month")?.text;
+      const raw = item.column_values.find(col => col.title === "Event Month")?.text;
       const date = parseDateFromText(raw);
       if (!date) return false;
       return date >= parsedStart && date <= parsedEnd;
@@ -308,7 +308,8 @@ function App() {
         borderRadius: "8px",
         background: "#f9f9f9",
         display: "flex", 
-        gap: "10px",
+        gap: "20px",
+        alignItems: "center",
       }}
     >
       <label>Filter by Date Range:</label>
